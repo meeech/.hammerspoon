@@ -19,9 +19,9 @@ function obj:updateMicMute(muted)
 		muted = hs.audiodevice.defaultInputDevice():muted()
 	end
 	if muted then
-		obj.mute_menu:setTitle("📵 Muted")
+		obj.mute_menu:setTitle("📵🤐")
 	else
-		obj.mute_menu:setTitle("🎙 On")
+		obj.mute_menu:setTitle("🎙🔥")
 	end
 end
 
@@ -34,7 +34,7 @@ end
 function obj:toggleMicMute()
 	local mic = hs.audiodevice.defaultInputDevice()
 	local zoom = hs.application'Zoom'
-  	local teams = hs.application.find("com.microsoft.teams")
+	local teams = hs.application.find("com.microsoft.teams")
 	if mic:muted() then
 		mic:setInputMuted(false)
 		if zoom then
