@@ -16,24 +16,19 @@ end
 -- Bind keys
 -- Spotify Volume
 function volume(volFunc)
-
-end
-hs.hotkey.bind({}, "F17", function()
     if 	not hs.spotify.isRunning() then
         return
     end
 
-    hs.spotify.volumeDown()
+    volFunc()
     hs.alert.show(string.format("🔊 %d", hs.spotify.getVolume()))
+end
+hs.hotkey.bind({}, "F17", function()
+    volume(hs.spotify.volumeDown)
 end)
 
 hs.hotkey.bind({"cmd"}, "F17", function()
-    if 	not hs.spotify.isRunning() then
-        return
-    end
-
-    hs.spotify.volumeUp()
-    hs.alert.show(string.format("🔊 %d", hs.spotify.getVolume()))
+    volume(hs.spotify.volumeUp)
 end)
 
 -- Config reload
