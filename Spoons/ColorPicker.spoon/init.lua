@@ -26,7 +26,7 @@ obj.logger = hs.logger.new('ColorPicker')
 --- ColorPicker.show_in_menubar
 --- Variable
 --- If `true`, show an icon in the menubar to trigger the color picker
-obj.show_in_menubar = true
+obj.show_in_menubar = false
 
 --- ColorPicker.menubar_title
 --- Variable
@@ -45,6 +45,9 @@ local indicators_shown = false
 
 -- Storage for the temporary keybinding for ESC to dismiss the colorpicker
 local esckey = nil
+
+-- Defaut colour table to fallback on
+local default_tablename = "Crayons"
 
 -- Return the sorted keys of a table
 function sortedkeys(tab)
@@ -79,7 +82,7 @@ end
 -- from the screen.
 function copyAndRemove(name, hex, tablename)
    local mods = hs.eventtap.checkKeyboardModifiers()
-   hs.pasteboard.setContents(mods.cmd and hex or name)
+   hs.pasteboard.setContents(mods.cmd and name or hex)
    obj.toggleColorSamples(tablename)
 end
 
@@ -114,8 +117,8 @@ end
 function obj.toggleColorSamples(tablename)
    local colortable = hs.drawing.color.lists()[tablename]
    if not colortable then
-      obj.logger.ef("Invalid color table '%s'", tablename)
-      return
+      obj.logger.i("Missing tablename %s, using default '%s'", tablename, default_tablename)
+      colortable = hs.drawing.color.lists()[default_tablename]
    end
    local screen = hs.screen.mainScreen()
    local frame = screen:frame()
@@ -175,10 +178,16 @@ function choosetable()
    return tab
 end
 
-function obj:start()
-   self.choosermenu = hs.menubar.new(false):setMenu(choosetable)
-   if self.show_in_menubar then
-      self.choosermenu:setTitle(self.menubar_title):returnToMenuBar()
+function obj:init()
+   obj.logger.w("ColorPicker initialized")
+
+   if(obj.show_in_menubar) then
+
+      self.choosermenu = hs.menubar.new()
+      self.choosermenu:setTitle(self.menubar_title)
+      self.choosermenu:setClickCallback(function()
+         self.choosermenu:setMenu(choosetable())
+      end)
    end
 end
 
@@ -192,6 +201,7 @@ end
 function obj:bindHotkeys(mapping)
    local def = { show = function() self.choosermenu:popupMenu(hs.mouse.getAbsolutePosition()) end }
    hs.spoons.bindHotkeysToSpec(def, mapping)
+
 end
 
 return obj
