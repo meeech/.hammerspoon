@@ -1,12 +1,14 @@
 -- Load any spoons
 hs.loadSpoon("AClock")
+hs.loadSpoon("ColorPicker")
 hs.loadSpoon("MicMute")
 --
 
 -- initialize
 hs.alert.show("Hammerspoon config reloaded.")
 myLogger = hs.logger.new('init', 'info')
--- myLogger.i(MicMute)
+
+spoon.ColorPicker.show_in_menubar = false
 
 -- Key Handlers
 function showTime()
@@ -56,16 +58,10 @@ end)
 --     win:setFrame(f)
 -- end)
 
--- hs.hotkey.bind({"ctrl"}, "F20", function()
---     local mitchAvatar = hs.image.imageFromPath("/Users/mitchellamihod/Documents/avatar/memoji-surprised.png")
+hs.hotkey.bind({"ctrl"}, "F20", function()
+    -- hs.osascript.applescript("choose color")
+    spoon.ColorPicker:toggleColorSamples()
+end)
 
---     hs.notify.new({
---         title="Hammerspoon",
---         informativeText="Hello World",
---         -- Not working
---         -- setIdImage="/Users/mitchellamihod/Documents/avatar/memoji-surprised.png"
---         contentImage=mitchAvatar
---     }):send()
--- end)
 
 
