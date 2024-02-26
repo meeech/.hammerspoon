@@ -33,10 +33,14 @@ end
 ---  * None
 function obj:toggleMicMute()
 	local mic = hs.audiodevice.defaultInputDevice()
-	local zoom = hs.application'Zoom'
+	local discord  = hs.application.find("Discord", true)
 	local teams = hs.application.find("com.microsoft.teams")
+	local zoom = hs.application'Zoom'
 	if mic:muted() then
 		mic:setInputMuted(false)
+		if discord then
+			hs.eventtap.keyStroke({"cmd","shift"}, "m", 0, discord)
+		end
 		if zoom then
 			local ok = zoom:selectMenuItem'Unmute Audio'
 			if not ok then
@@ -55,6 +59,9 @@ function obj:toggleMicMute()
 		end
 	else
 		mic:setInputMuted(true)
+		if discord then
+			hs.eventtap.keyStroke({"cmd","shift"}, "m", 0, discord)
+		end
 		if zoom then
 			local ok = zoom:selectMenuItem'Mute Audio'
 			if not ok then
