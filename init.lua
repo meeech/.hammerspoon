@@ -10,6 +10,7 @@ hs.alert.show("Hammerspoon config reloaded.")
 myLogger = hs.logger.new('init', 'info')
 
 spoon.ColorPicker.show_in_menubar = false
+spoon.PickAndStick:start()
 
 -- Key Handlers
 local function showTime()

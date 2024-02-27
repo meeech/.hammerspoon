@@ -64,26 +64,38 @@ end
 
 function obj:init()
     obj.logger.w("PickAndStick initialized")
-    showMenu()
     if (obj.show_in_menubar) then
-        self.choosermenu = hs.menubar.new()
+        self.choosermenu = hs.menubar.new(true, 'picknstick')
         self.choosermenu:setTitle(self.menubar_title)
         self.choosermenu:setClickCallback(function()
-            self.choosermenu:setMenu(showMenu)
+            obj.logger.w("No action on click yet.")
         end)
     end
 end
 
---- PickAndStick:bindHotkeys(mapping)
---- Method
---- Binds hotkeys for PickAndStick
----
---- Parameters:
----  * mapping - A table containing hotkey objifier/key details for the following items:
----   * show - Show color picker menu
-function obj:bindHotkeys(mapping)
-    local def = { show = function() self.choosermenu:popupMenu(hs.mouse.getAbsolutePosition()) end }
-    hs.spoons.bindHotkeysToSpec(def, mapping)
+local function onInputChange()
+
+end
+
+-- preferred_inputs list of preferred inputs
+function obj:start(preferred_inputs)
+    -- if preferred_inputs is empty, give error message
+    -- check in lua if the preferred_inputs is empty
+
+    if preferred_inputs == nil or next(preferred_inputs) == nil then
+        obj.logger.w("No preferred inputs specified. Nothing to do.")
+        return
+    end
+
+    -- call initial Set Audio Input
+    -- set up watcher
+    -- local inputs = hs.audiodevice.allInputDevices()
+
+    -- start audio input change watcher
+end
+
+function obj:stop()
+    -- stop audio input change watcher
 end
 
 return obj
