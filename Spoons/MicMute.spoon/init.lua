@@ -4,7 +4,7 @@
 ---
 --- Download: [https://github.com/Hammerspoon/Spoons/raw/master/Spoons/MicMute.spoon.zip](https://github.com/Hammerspoon/Spoons/raw/master/Spoons/MicMute.spoon.zip)
 
-local obj={}
+local obj = {}
 obj.__index = obj
 
 -- Metadata
@@ -32,49 +32,49 @@ end
 --- Parameters:
 ---  * None
 function obj:toggleMicMute()
-	local mic = hs.audiodevice.defaultInputDevice()
-	local discord  = hs.application.find("Discord", true)
-	local teams = hs.application.find("com.microsoft.teams")
-	local zoom = hs.application'Zoom'
+	local mic     = hs.audiodevice.defaultInputDevice()
+	local discord = hs.application.find("Discord", true)
+	local teams   = hs.application.find("com.microsoft.teams")
+	local zoom    = hs.application 'zoom.us'
 	if mic:muted() then
 		mic:setInputMuted(false)
 		if discord then
-			hs.eventtap.keyStroke({"cmd","shift"}, "m", 0, discord)
+			hs.eventtap.keyStroke({ "cmd", "shift" }, "m", 0, discord)
 		end
 		if zoom then
-			local ok = zoom:selectMenuItem'Unmute Audio'
+			local ok = zoom:selectMenuItem 'Unmute audio'
 			if not ok then
 				hs.timer.doAfter(0.5, function()
-					zoom:selectMenuItem'Unmute Audio'
+					zoom:selectMenuItem 'Unmute audio'
 				end)
 			end
 		end
 		if teams then
-			local ok = teams:selectMenuItem'Unmute'
+			local ok = teams:selectMenuItem 'Unmute'
 			if not ok then
 				hs.timer.doAfter(0.5, function()
-					hs.eventtap.keyStroke({"cmd","shift"}, "m", 0, teams)
+					hs.eventtap.keyStroke({ "cmd", "shift" }, "m", 0, teams)
 				end)
 			end
 		end
 	else
 		mic:setInputMuted(true)
 		if discord then
-			hs.eventtap.keyStroke({"cmd","shift"}, "m", 0, discord)
+			hs.eventtap.keyStroke({ "cmd", "shift" }, "m", 0, discord)
 		end
 		if zoom then
-			local ok = zoom:selectMenuItem'Mute Audio'
+			local ok = zoom:selectMenuItem 'Mute audio'
 			if not ok then
 				hs.timer.doAfter(0.5, function()
-					zoom:selectMenuItem'Mute Audio'
+					zoom:selectMenuItem 'Mute audio'
 				end)
 			end
 		end
 		if teams then
-			local ok = teams:selectMenuItem'Mute'
+			local ok = teams:selectMenuItem 'Mute'
 			if not ok then
 				hs.timer.doAfter(0.5, function()
-					hs.eventtap.keyStroke({"cmd","shift"}, "m", 0, teams)
+					hs.eventtap.keyStroke({ "cmd", "shift" }, "m", 0, teams)
 				end)
 			end
 		end
@@ -114,7 +114,6 @@ function obj:bindHotkeys(mapping, latch_timeout)
 
 	return self
 end
-
 
 function obj:init()
 	obj.time_since_mute = 0
