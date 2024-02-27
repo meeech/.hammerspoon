@@ -2,6 +2,7 @@
 hs.loadSpoon("AClock")
 hs.loadSpoon("ColorPicker")
 hs.loadSpoon("MicMute")
+hs.loadSpoon("PickAndStick")
 --
 
 -- initialize
@@ -33,11 +34,13 @@ hs.hotkey.bind({"cmd"}, "F17", function()
     volume(hs.spotify.volumeUp)
 end)
 
+---------------------------------------------------------------------
 -- Config reload
 hs.hotkey.bind({"ctrl"}, "F17", function()
     hs.reload()
 end)
 
+---------------------------------------------------------------------
 -- MicMute:bindHotkeys(mapping, latch_timeout)
 -- We can't use this yet for latch - need to ficx our code.py
 -- to use press/releaseMicMute:bindHotkeys({}, "F20")
@@ -46,7 +49,8 @@ hs.hotkey.bind({}, "F20", function()
     spoon.MicMute:toggleMicMute()
 end)
 
--- This is used for Keycastr
+---------------------------------------------------------------------
+-- Keycastr
 hs.hotkey.bind({"cmd"}, "F20", function()
     hs.alert.show("👀 KeyCastr Toggled!")
 end)
@@ -58,6 +62,8 @@ end)
 --     win:setFrame(f)
 -- end)
 
+---------------------------------------------------------------------
+-- ColorPicker
 hs.hotkey.bind({"ctrl"}, "F20", function()
     -- hs.osascript.applescript("choose color")
     spoon.ColorPicker:toggleColorSamples()
