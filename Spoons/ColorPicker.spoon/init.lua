@@ -6,7 +6,7 @@
 ---
 --- Download: [https://github.com/Hammerspoon/Spoons/raw/master/Spoons/ColorPicker.spoon.zip](https://github.com/Hammerspoon/Spoons/raw/master/Spoons/ColorPicker.spoon.zip)
 
-local obj={}
+local obj = {}
 obj.__index = obj
 
 local draw = require('hs.drawing')
@@ -51,9 +51,9 @@ local default_tablename = "Crayons"
 
 -- Return the sorted keys of a table
 function sortedkeys(tab)
-   local keys={}
+   local keys = {}
    -- Create sorted list of keys
-   for k,v in pairs(tab) do table.insert(keys, k) end
+   for k, v in pairs(tab) do table.insert(keys, k) end
    table.sort(keys)
    return keys
 end
@@ -61,11 +61,11 @@ end
 -- Algorithm to choose whether white/black as the most contrasting to a given
 -- color, from http://gamedev.stackexchange.com/a/38561/73496
 function contrastingColor(color)
-   local black = { red=0.000,green=0.000,blue=0.000,alpha=1 }
-   local white = { red=1.000,green=1.000,blue=1.000,alpha=1 }
-   local c=draw.color.asRGB(color)
+   local black = { red = 0.000, green = 0.000, blue = 0.000, alpha = 1 }
+   local white = { red = 1.000, green = 1.000, blue = 1.000, alpha = 1 }
+   local c = draw.color.asRGB(color)
    if type(c) == "table" then
-      local L = 0.2126*(c.red*c.red) + 0.7152*(c.green*c.green) + 0.0722*(c.blue*c.blue)
+      local L = 0.2126 * (c.red * c.red) + 0.7152 * (c.green * c.green) + 0.0722 * (c.blue * c.blue)
       if L <= 0.5 then
          return white
       end
@@ -75,7 +75,7 @@ end
 
 -- Get the frame for a single swatch
 function getSwatchFrame(frame, hsize, vsize, column, row)
-   return hs.geometry.rect(frame.x+(column*hsize), frame.y+(row*vsize), hsize, vsize)
+   return hs.geometry.rect(frame.x + (column * hsize), frame.y + (row * vsize), hsize, vsize)
 end
 
 -- Copy the name/code of the color to the clipboard, and remove the colors
@@ -90,21 +90,23 @@ end
 function drawSwatch(tablename, swatchFrame, colorname, col)
    local swatch = draw.rectangle(swatchFrame)
    swatch:setFill(true)
-      :setFillColor(col)
-      :setStroke(false)
-      :setLevel(draw.windowLevels.overlay)
-      :show()
+       :setFillColor(col)
+       :setStroke(false)
+       :setLevel(draw.windowLevels.overlay)
+       :show()
    table.insert(swatches[tablename], swatch)
    if colorname ~= "" then
-      color=draw.color.asRGB(col)
-      local hex = "#" .. string.format("%02x%02x%02x", math.floor(255*color.red), math.floor(255*color.green), math.floor(255*color.blue))
+      color = draw.color.asRGB(col)
+      local hex = "#" ..
+      string.format("%02x%02x%02x", math.floor(255 * color.red), math.floor(255 * color.green),
+         math.floor(255 * color.blue))
       local str = hs.styledtext.new(string.format("%s\n%s", colorname, hex),
-                                    { paragraphStyle = {alignment = "center"}, font={size=16.0}, color=contrastingColor(col) } )
+         { paragraphStyle = { alignment = "center" }, font = { size = 16.0 }, color = contrastingColor(col) })
       local text = hs.drawing.text(swatchFrame, str)
-         :setLevel(draw.windowLevels.overlay+1)
-         :setClickCallback(nil, hs.fnutils.partial(copyAndRemove, colorname, hex, tablename))
-         :show()
-      table.insert(swatches[tablename],text)
+          :setLevel(draw.windowLevels.overlay + 1)
+          :setClickCallback(nil, hs.fnutils.partial(copyAndRemove, colorname, hex, tablename))
+          :show()
+      table.insert(swatches[tablename], text)
    end
 end
 
@@ -125,14 +127,14 @@ function obj.toggleColorSamples(tablename)
 
    if indicators_shown then
       if esckey then esckey:disable() end
-      esckey=nil
+      esckey = nil
    else
       esckey = hs.hotkey.bindSpec({ {}, "escape" }, hs.fnutils.partial(obj.toggleColorSamples, tablename))
    end
 
    if swatches[tablename] ~= nil then
       -- If the objects exist already, just show/hide them as needed
-      for i,obj in ipairs(swatches[tablename]) do
+      for i, obj in ipairs(swatches[tablename]) do
          if indicators_shown then
             obj:hide()
          else
@@ -146,22 +148,22 @@ function obj.toggleColorSamples(tablename)
       keys = sortedkeys(colortable)
 
       -- Scale number of rows/columns according to the screen's aspect ratio
-      local rows = math.floor(math.sqrt(#keys)*(frame.w/frame.h))
-      local columns = math.ceil(math.sqrt(#keys)/(frame.w/frame.h))
+      local rows = math.floor(math.sqrt(#keys) * (frame.w / frame.h))
+      local columns = math.ceil(math.sqrt(#keys) / (frame.w / frame.h))
       local hsize = math.floor(frame.w / columns)
       local vsize = math.floor(frame.h / rows)
 
-      for i = 1,(rows*columns),1 do   -- fill the entire square
+      for i = 1, (rows * columns), 1 do -- fill the entire square
          local colorname = keys[i]
-         local column = math.floor((i-1)/rows)
-         local row = i-1-(column*rows)
-         local swatchFrame = getSwatchFrame(frame,hsize,vsize,column,row)
-         if colorname ~= nil then     -- with the corresponding color swatch
+         local column = math.floor((i - 1) / rows)
+         local row = i - 1 - (column * rows)
+         local swatchFrame = getSwatchFrame(frame, hsize, vsize, column, row)
+         if colorname ~= nil then -- with the corresponding color swatch
             local color = colortable[colorname]
-            drawSwatch(tablename,swatchFrame,colorname,color)
-         else  -- or with a gray swatch to fill up the rectangle
-            local gray = { red=0.500,green=0.500,blue=0.500,alpha=1 }
-            drawSwatch(tablename,swatchFrame,"",gray)
+            drawSwatch(tablename, swatchFrame, colorname, color)
+         else -- or with a gray swatch to fill up the rectangle
+            local gray = { red = 0.500, green = 0.500, blue = 0.500, alpha = 1 }
+            drawSwatch(tablename, swatchFrame, "", gray)
          end
       end
       indicators_shown = true
@@ -169,20 +171,19 @@ function obj.toggleColorSamples(tablename)
 end
 
 function choosetable()
-   local tab={}
-   local lists=draw.color.lists()
-   local keys=sortedkeys(lists)
-   for i,v in ipairs(keys) do
-      table.insert(tab, {title = v, fn = hs.fnutils.partial(obj.toggleColorSamples, v)})
+   local tab = {}
+   local lists = draw.color.lists()
+   local keys = sortedkeys(lists)
+   for i, v in ipairs(keys) do
+      table.insert(tab, { title = v, fn = hs.fnutils.partial(obj.toggleColorSamples, v) })
    end
    return tab
 end
 
 function obj:init()
-   obj.logger.w("ColorPicker initialized")
+   obj.logger.i("ColorPicker initialized")
 
-   if(obj.show_in_menubar) then
-
+   if (obj.show_in_menubar) then
       self.choosermenu = hs.menubar.new()
       self.choosermenu:setTitle(self.menubar_title)
       self.choosermenu:setClickCallback(function()
@@ -201,7 +202,6 @@ end
 function obj:bindHotkeys(mapping)
    local def = { show = function() self.choosermenu:popupMenu(hs.mouse.getAbsolutePosition()) end }
    hs.spoons.bindHotkeysToSpec(def, mapping)
-
 end
 
 return obj
