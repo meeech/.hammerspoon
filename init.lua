@@ -12,31 +12,32 @@ myLogger = hs.logger.new('init', 'info')
 spoon.ColorPicker.show_in_menubar = false
 
 -- Key Handlers
-function showTime()
+local function showTime()
     spoon.AClock:toggleShow()
 end
 
 -- Bind keys
 -- Spotify Volume
-function volume(volFunc)
-    if 	not hs.spotify.isRunning() then
+local function volume(volFunc)
+    if not hs.spotify.isRunning() then
         return
     end
 
     volFunc()
     hs.alert.show(string.format("🔊 %d", hs.spotify.getVolume()))
 end
+
 hs.hotkey.bind({}, "F17", function()
     volume(hs.spotify.volumeDown)
 end)
 
-hs.hotkey.bind({"cmd"}, "F17", function()
+hs.hotkey.bind({ "cmd" }, "F17", function()
     volume(hs.spotify.volumeUp)
 end)
 
 ---------------------------------------------------------------------
 -- Config reload
-hs.hotkey.bind({"ctrl"}, "F17", function()
+hs.hotkey.bind({ "ctrl" }, "F17", function()
     hs.reload()
 end)
 
@@ -51,7 +52,7 @@ end)
 
 ---------------------------------------------------------------------
 -- Keycastr
-hs.hotkey.bind({"cmd"}, "F20", function()
+hs.hotkey.bind({ "cmd" }, "F20", function()
     hs.alert.show("👀 KeyCastr Toggled!")
 end)
 
@@ -64,10 +65,7 @@ end)
 
 ---------------------------------------------------------------------
 -- ColorPicker
-hs.hotkey.bind({"ctrl"}, "F20", function()
+hs.hotkey.bind({ "ctrl" }, "F20", function()
     -- hs.osascript.applescript("choose color")
     spoon.ColorPicker:toggleColorSamples()
 end)
-
-
-
