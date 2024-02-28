@@ -10,7 +10,10 @@ hs.alert.show("Hammerspoon config reloaded.")
 myLogger = hs.logger.new('init', 'info')
 
 spoon.ColorPicker.show_in_menubar = false
-spoon.PickAndStick:start()
+spoon.PickAndStick:start({
+    "Yeti Stereo Microphone",
+    "MacBook Pro Microphone"
+})
 
 -- Key Handlers
 local function showTime()

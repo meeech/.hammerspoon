@@ -19,10 +19,15 @@ obj.logger = hs.logger.new('PickAndStick')
 --- If `true`, show an icon in the menubar to trigger the color picker
 obj.show_in_menubar = true
 
---- PickAndStick.menubar_title
+--- PickAndStick.menubar_title_on
 --- Variable
 --- Title to show in the menubar if `show_in_menubar` is true. [Emojis](http://emojipedia.org/rainbow/)
-obj.menubar_title = "\u{1F4CC}"
+obj.menubar_title_on = "📌"
+
+--- PickAndStick.menubar_title_off
+--- Variable
+--- Title to show in the menubar if `show_in_menubar` is true. [Emojis](http://emojipedia.org/rainbow/)
+obj.menubar_title_off = "📌⏸️"
 
 -- PIckAndStick.preferred_inputs
 -- Variable
@@ -30,36 +35,6 @@ obj.menubar_title = "\u{1F4CC}"
 obj.preferred_inputs = {}
 
 local deviceInputChangedCode = 'dIn '
-
--- Return the sorted keys of a table
-function sortedkeys(tab)
-    local keys = {}
-    -- Create sorted list of keys
-    for k, v in pairs(tab) do table.insert(keys, k) end
-    table.sort(keys)
-    return keys
-end
-
--- function choosetable()
---     local tab = {}
---     local lists = draw.color.lists()
---     local keys = sortedkeys(lists)
---     for i, v in ipairs(keys) do
---         table.insert(tab, { title = v, fn = hs.fnutils.partial(obj.toggleColorSamples, v) })
---     end
---     return tab
--- end
-
-local function listInputs()
-    -- get list of audio inputs
-    local inputs = hs.audiodevice.allInputDevices()
-    local keys = sortedkeys(inputs)
-    local tab = {}
-
-    for _, v in ipairs(keys) do
-        obj.logger.w("Input key: %s: %s", v, inputs[v]:name())
-    end
-end
 
 -- https://www.hammerspoon.org/docs/hs.audiodevice.watcher.html#setCallback
 function PSonInputChange(whatChanged)
@@ -107,9 +82,16 @@ function obj:init()
     obj.logger.w("PickAndStick initialized")
     if (obj.show_in_menubar) then
         self.choosermenu = hs.menubar.new(true, 'picknstick')
-        self.choosermenu:setTitle(self.menubar_title)
+        self.choosermenu:setTitle(self.menubar_title_on)
+
         self.choosermenu:setClickCallback(function()
-            listInputs()
+            if hs.audiodevice.watcher.isRunning() == true then
+                obj:stop()
+                self.choosermenu:setTitle(self.menubar_title_off)
+            else
+                obj:start(obj.preferred_inputs)
+                self.choosermenu:setTitle(self.menubar_title_on)
+            end
         end)
     end
 end
