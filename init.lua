@@ -1,5 +1,4 @@
 -- Load any spoons
-hs.loadSpoon("AClock")
 hs.loadSpoon("ColorPicker")
 hs.loadSpoon("MicMute")
 hs.loadSpoon("PickAndStick")
@@ -14,11 +13,6 @@ spoon.PickAndStick:start({
     "Yeti Stereo Microphone",
     "MacBook Pro Microphone"
 })
-
--- Key Handlers
-local function showTime()
-    spoon.AClock:toggleShow()
-end
 
 -- Bind keys
 -- Spotify Volume
