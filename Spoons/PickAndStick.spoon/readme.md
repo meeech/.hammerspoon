@@ -1,4 +1,4 @@
-Spoon to set a default device.
+Spoon to set a default audio input device.
 
 OSX tries to be helpful when you connect your airpods to your mac, and changes your default input device to the airpods.
 
